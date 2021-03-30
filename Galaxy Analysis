@@ -1,0 +1,122 @@
+from astropy.io import fits                             #provides functions and methods from the astropy package
+import matplotlib.pyplot as plt                         #provides functions and methods from the matplotlib package
+from matplotlib.pyplot import figure
+#import pandas as pd
+import numpy as np                                      #provides functions and methods from the numpy package
+import os                                               #provides functions which interacts with the operating system
+
+print ("Module for Analyzing .fits files: {}".format(__name__))
+#def main():
+
+#NGC 3227, NGC 4151, and NGC 3081.  The galaxy mrk573
+#Choosing which galaxies based on the element you want to read the map_gau and disp_gau data from using input. The SiVI flux on x axis, and the H2 dispersion on y axis, and vice versa.
+el = input('Which elements flux? H2 or SiVI: ')
+if (el == 'H2' or el == 'h2'):                                                                                                                                                  #use inputvalue to pick which element
+        pltel = 'SiVI'
+        glx_list = os.listdir(r'C:\Users\didri\Documents\Spring2021\PHYS481 Individual Research\H2_Maps-20210201T082125Z-001\H2_Maps')                                          #subdirectory path. All maps of galaxies have the same dim so an arbitrary one sufficient.
+        for r in range(0, 7):                                                                                                                                                   #prints the name of each galaxyfolder to ease selection
+                for c in range(r, r + 7):
+                        print(glx_list[c], end=", ")
+                print()
+        glx = input('Which galaxy: ')                                                                                                                                           #use inputvalue to chose which galaxy to analyze
+        map_gau = r'C:\Users\didri\Documents\Spring2021\PHYS481 Individual Research\H2_Maps-20210201T082125Z-001\H2_Maps' + '\\' + glx + '\\H2\\Spat3\\map_gau.fits'            #flux directory
+        disp_gau = r'C:\Users\didri\Documents\Spring2021\PHYS481 Individual Research\SiVI_Maps-20210201T084648Z-001\SiVI_Maps' + '\\' + glx + '\\SiVI\\Spat3\\disp_gau.fits'    #dispersion directory
+        image_data_mg = fits.open(map_gau)                                                                                                                                      #reads the selected files data using astropys method.open
+        image_data_dg = fits.open(disp_gau)
+        dshape = image_data_mg[0].data.shape                                                                                                                                    #uses astropys .data.shape method to extract the dimension of the file
+        dshape = np.subtract(dshape, (1, 1))                                                                                                                                    #subtracts axis value with 1 due to index errors
+        y, x = dshape                                                                                                                                                           #converting the axis values to variables to use in .data
+        data_mg = image_data_mg[0].data[0:x, 0:y]                                                                                                                               #reads the data from the pixel arrays
+        data_dg = image_data_dg[0].data[0:x, 0:y]
+        #print('Flux and dispersion values for H2 and SiVI, respectively:')
+        #print(glx + ': ' + str(data_mg))                                                                                                                                        #prints the values of each pixel in array to make sure it is the right data
+        #print(glx + ': ' + str(data_dg))
+
+        #plt.figure(figsize=[15, 8])
+        #plt.scatter(data_mg, data_dg)
+        #X = data_mg
+        #plt.semilogx(X)
+        #plt.ylim(0, 500)
+        #plt.xlim(0.001, 4)
+        #plt.xlabel(el.upper() + ' flux values')
+        #plt.ylabel(pltel + ' dispersion values')
+        #plt.savefig('plot_' + glx.upper() + '_' + 'flux' + '_' + el.upper())
+        #plt.show()
+
+
+
+#main
+elif (el == 'SiVI' or el == 'sivi'):
+        pltel = 'H2'
+        glx_list = os.listdir(r'C:\Users\didri\Documents\Spring2021\PHYS481 Individual Research\H2_Maps-20210201T082125Z-001\H2_Maps')
+        for r in range(0, 7):
+                for c in range(r, r + 7):
+                        print(glx_list[c], end=", ")
+                print()
+        glx = input('Which galaxy: ')
+        map_gau = r'C:\Users\didri\Documents\Spring2021\PHYS481 Individual Research\SiVI_Maps-20210201T084648Z-001\SiVI_Maps' + '\\' + glx + '\\SiVI\\Spat3\\map_gau.fits'
+        disp_gau = r'C:\Users\didri\Documents\Spring2021\PHYS481 Individual Research\H2_Maps-20210201T082125Z-001\H2_Maps' + '\\' + glx + '\\H2\\Spat3\\disp_gau.fits'
+        image_data_mg = fits.open(map_gau)
+        image_data_dg = fits.open(disp_gau)
+        dshape = image_data_mg[0].data.shape
+        dshape = np.subtract(dshape, (1, 1))
+        y, x = dshape
+        data_mg = image_data_mg[0].data[0:x, 0:y]
+        data_dg = image_data_dg[0].data[0:x, 0:y]
+        #print('Flux and dispersion values for H2 and SiVI, respectively:')
+        #print(glx + ': ' + str(data_mg))
+        #print(glx + ': ' + str(data_dg))
+        #plt.figure(figsize=[15,8])
+        #plt.scatter(data_mg, data_dg)
+        #X = data_mg
+        #plt.semilogx(X)
+        #plt.ylim(0, 500)
+        #plt.xlim(0.001, 4)
+        #plt.xlabel(el.upper() + ' flux values')
+        #plt.ylabel(pltel + ' dispersion values')
+        ##plt.savefig('plot_' + glx.upper() + '_' + 'flux' + '_' + el.upper())
+        #plt.show()
+
+
+        #signal-to-noise ratio
+        map_gau = r'C:\Users\didri\Documents\Spring2021\PHYS481 Individual Research\SiVI_Maps-20210201T084648Z-001\SiVI_Maps' + '\\' + glx + '\\SiVI\\Spat3\\map_gau.fits'
+        map_gau_err = r'C:\Users\didri\Documents\Spring2021\PHYS481 Individual Research\SiVI_Maps-20210201T084648Z-001\SiVI_Maps' + '\\' + glx + '\\SiVI\\Spat3\\map_gau_err.fits'
+        disp_gau = r'C:\Users\didri\Documents\Spring2021\PHYS481 Individual Research\H2_Maps-20210201T082125Z-001\H2_Maps' + '\\' + glx + '\\H2\\Spat3\\disp_gau.fits'
+        image_data_dg = fits.open(disp_gau)
+        image_data_mg = fits.open(map_gau)
+        image_data_err = fits.open(map_gau_err)
+        dshape = image_data_mg[0].data.shape
+        dshape = np.subtract(dshape, (1, 1))
+        y, x = dshape
+        data_mg = image_data_mg[0].data[0:x, 0:y]
+        data_err = image_data_err[0].data[0:x, 0:y]
+        data_dg = image_data_dg[0].data[0:x, 0:y]
+
+        data_mg = data_mg.astype('float')
+        data_mg[data_mg == 0] = 'nan'
+        data_err = data_err.astype('float')
+        data_err[data_err == 0] = 'nan'
+
+        ratio = np.divide(data_mg[0:x, 0:y], data_err[0:x, 0:y])
+        #for i in ratio:
+        #        for j in i:
+        #                if j > 2:
+        #                        plt.figure(figsize=[15,8])
+        #                        plt.scatter(ratio, data_dg)
+        #                        X = ratio
+        #                        plt.semilogx(X)
+        #                        plt.ylim(0, 500)
+        #                        plt.xlim(1, 7)
+        #                        plt.xlabel(el.upper() + ' flux values')
+        #                        plt.ylabel(pltel + ' dispersion values')
+        #                        #plt.savefig('plot_' + glx.upper() + '_' + 'flux' + '_' + el.upper())
+        #                        plt.show()
+
+
+        b = np.where(data_dg < 100) #median(maybe mean too if making a cutoff?), also make it ignore all values that are 'nan'. filter it out
+        print(np.median(data_mg[b]))
+
+        #a = np.where(data_dg <= 100)
+        #print(data_dg[a])
+
+        #filter out s-t-n and then filter those out from the original flux/disp plot
