@@ -1,0 +1,17 @@
+
+aNames = ['Didrik', 'Li', 'Tony', 'Nicole', 'Olav', 'Georgia', 'Moro', 'Rebecca',
+          'Leon', 'Mikey', 'Chloe', 'Brandon', 'Ryland', 'Austin', 'Hannah']
+nNames = ['Anna', 'Astrid', 'Tuva B', 'Tuva G', 'Pascale', 'Helen', 'Carly', 'Sigurd',
+          'Espen', 'Magnus', 'Gus', 'Seiji', 'Derek', 'JC', 'Michaela']        
+aValues = [5, 1, 4, 1, 4, 1, 1, 2, 4, 4, 1, 5, 4, 6, 6]
+nValues = [7, 8, 8, 6, 6.5, 6, 6, 10, 10, 10, 10, 6.5, 7, 10, 6]
+    
+aLists = list(zip(aNames, aValues))
+nLists = list(zip(nNames, nValues))
+
+aLists.sort(reverse = True, key = lambda x: x[1])
+nLists.sort(key = lambda x: x[1])
+
+teams = list(zip(aLists, nLists))
+for x in teams:
+    print(x)
